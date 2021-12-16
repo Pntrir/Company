@@ -1,0 +1,349 @@
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="Lyndon Panton" />
+    <meta name="description" content="An application for taking and deleting notes" />
+    <meta name="robots" content="index, follow, noarchive" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Notes</title>
+    <!-- fontawesome cdn -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" />
+    <!-- custom stylesheet -->
+    <!--<link rel="stylesheet" type="text/css" href="./css/styles.css" />-->
+    <!-- custom script -->
+    <!--<script type="text/javascript" src="./js/app.js"></script>-->
+    <link rel="shortcut icon" href="rbkx8jwbmbq_icon.png" type="image/png">
+    <style>@charset "UTF-8";
+
+/* general */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 16px;
+    color: #000000;
+}
+
+/* header */
+h1 {
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header {
+    background-color: #0a97f5;
+    color: #FFFFFF;
+}
+
+.selected {
+    border-bottom: #FFA500 solid 3px;
+    color: #FFFFFF !important;
+}
+
+.tab {
+    flex: 1;
+    
+    padding: 5px 0;
+    color: #000000;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#hamburger {
+    position: absolute;
+    
+    margin: 18px 6vw;
+    font-size: 1.2em;
+}
+
+#tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+    text-align: center;
+}
+
+/* main */
+input {
+    display: block;
+    margin: 0 auto;
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+input[type="text"] {
+    margin: 10px auto;
+    border: none;
+    border-bottom: #000000 solid 1px;
+}
+
+textarea {
+    display: block;
+    margin: 15px auto;
+    border: #000000 black 1px;
+    border-radius: 2px;
+    overflow-y: scroll;
+    width: 90%;
+    height: 50%;
+    font-size: 1.2em;
+
+    resize: none;
+}
+
+.closed {
+    display: none;
+}
+
+.fa-check {
+    left: 90%;
+    color: #00FF00;
+}
+
+.fa-pencil-alt {
+    color: #4682B4;
+}
+
+.fa-save {
+    color: #FFA500;
+}
+
+.fa-times {
+    left: 85%;
+    color: #FF0000;
+}
+
+.note {
+    margin: 10px auto;
+    padding: 5px 2vw;
+    border: silver solid 1px;
+    width: 90%;
+    background-color: #EFEFEF;
+}
+
+.note-content {
+    margin: 7px 0;
+}
+
+.note-content[contentEditable="true"] {
+    border: silver solid 1px;
+    border-radius: 4px;
+    padding: 5px 2vw 5px 1vw;
+    background-color: #FAFAFA;
+}
+
+.note-done {
+    opacity: 0.2;
+}
+
+.note-edit {
+    left: 80%;
+}
+
+.note-head {
+    margin: 3px 0;
+    text-decoration: underline;
+}
+
+.note-icon {
+    position: relative;
+    top: -30px;
+}
+
+.note-sub {
+    margin: -18px 0 8px;
+    opacity: 0.6;
+    font-size: 0.8em;
+}
+
+#form {
+    margin: 20px 2vw;
+    border: #000000 solid 1px;
+    height: 70vh;
+}
+
+#submit {
+    display: block;
+    margin: 0 auto;
+    border: midnightblue solid 2px;
+    border-radius: 5px;
+    padding: 5px 5vw;
+    background-color: steelblue;
+    color: #FFFFFF;
+}
+
+#submit:active {
+    border-color: steelblue;
+    background-color: midnightblue;
+}</style>
+</head>
+
+<body>
+    <header id="header">
+        <i id="hamburger" class="fas fa-bars" tabindex="0"></i>
+        <h1>My Notes</h1>
+        <div id="tabs">
+            <span class="tab selected">Maker</span>
+            <span class="tab">Notes</span>
+        </div>
+    </header>
+
+    <main id="main">
+        <section id="maker">
+            <form id="form">
+                <input id="title" type="text" name="title" placeholder="Title"/>
+                <input id="sub" type="text" name="sub" placeholder="Sub Title"/>
+                <textarea id="content" name="content"></textarea>
+                
+                <input id="submit" type="submit" name="submit" value="Make Note" />
+            </form>
+        </section>
+
+        <section id="notes" class="closed">
+            
+        </section>
+    </main>
+
+    <footer id="footer">
+        
+    </footer>
+    <script>window.onload = function(event) {
+    let storedNotes = [];
+
+    /* if (window.localStorage && localStorage.storedNotes) {
+        init();
+    } */
+
+    let tabs = document.getElementsByClassName("tab");
+    Array.from(tabs).forEach(function(tab) {
+        tab.addEventListener("click", switchTab.bind(this, tab));
+        tab.addEventListener("keydown", function(event) {
+            if (event.keyCode === 13 || event.keyCode === 32) {
+                switchTab(this);
+            }
+        });
+    });
+
+    let form = document.getElementById("form");
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let title = document.getElementById("title").value;
+        let sub = document.getElementById("sub").value;
+        let content = document.getElementById("content").value;
+        
+        createNote(title, sub, content);
+        
+        this.reset();
+    });
+
+    function createNote(title, sub, content) {
+        let note = document.createElement("div");
+        note.classList.add("note");
+        
+        let t = document.createElement("h2");
+        t.classList.add("note-head");
+        t.textContent = title.trim();
+        
+        
+        let s = document.createElement("h3");
+        s.classList.add("note-sub");
+        s.textContent = sub.trim();
+        
+        let c = document.createElement("p");
+        c.classList.add("note-content");
+        c.textContent = content.trim();
+        
+        let edit = document.createElement("i");
+        edit.classList.add("fas", "fa-pencil-alt", "note-icon", "note-edit");
+        edit.addEventListener("click", function(event) {
+            toggleEdit(this.parentElement);
+        });
+        
+        let check = document.createElement("i");
+        check.classList.add("fas", "fa-check", "note-icon");
+        check.addEventListener("click", function(event) {
+            toggleCheck(this.parentElement);
+        });
+        
+        let times = document.createElement("i");
+        times.classList.add("fas", "fa-times", "note-icon");
+        times.addEventListener("click", function(event) {
+            removeNote(this.parentElement);
+        });
+        
+        note.appendChild(t);
+        note.appendChild(edit);
+        note.appendChild(times);
+        note.appendChild(check);
+        note.appendChild(s);
+        note.appendChild(c);
+        
+        document.getElementById("notes").appendChild(note);
+    }
+
+    function init() {
+        // local storage
+    }
+    
+    function removeNote(note) {
+        note.parentElement.removeChild(note);
+    }
+
+    function switchTab(tab) {
+        let tabs = Array.from(tab.parentElement.children);
+        for (let i = 0; i < tabs.length; i++) {
+             tabs[i].classList.remove("selected");
+        }
+
+        tab.classList.add("selected");
+        
+        let maker = document.getElementById("maker");
+        let notes = document.getElementById("notes");
+        
+        if (tab.textContent === "Maker") {
+            maker.classList.remove("closed");
+            notes.classList.add("closed");
+        } else {
+            notes.classList.remove("closed");
+            maker.classList.add("closed");
+        }
+    }
+
+    function toggleCheck(note) {
+        if (Array.from(note.classList).indexOf("note-done") === -1) {
+            note.classList.add("note-done");
+        } else {
+            note.classList.remove("note-done");
+        }
+    }
+    
+    function toggleEdit(note) {
+        let content = note.getElementsByClassName("note-content")[0];
+        let icon = note.getElementsByClassName("note-edit")[0];
+        
+        if (content.contentEditable === "true") {
+            icon.classList.remove("fa-save");
+            icon.classList.add("fa-pencil-alt");
+            
+            content.contentEditable = "false";
+        } else {
+            icon.classList.remove("fa-pencil-alt");
+            icon.classList.add("fa-save");
+            
+            content.contentEditable = "true";
+        }
+    }
+};</script>
+</body>
+</html>
