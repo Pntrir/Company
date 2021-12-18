@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Paint</title>
+      <style>  html, body {
+         position: fixed;
+         }
+body {background: #007EFF;
+         
+         }
+canvas {
+         background: #FFFFFF;
+         }
+         #widthChanger {
+         margin-top: 15px;
+         left: 60px;
+         height: 15px;
+         width: 190px;
+         }
+         button {
+         position: relative;
+         left: 10px;
+         bottom: 0;
+         width: 25px;
+         height: 30px;
+         border: none;
+         }
+         span {
+         position: relative;
+         margin-left: 10px;
+         top: -3px;
+         }
+         #repeat {
+         margin-left: 85px;
+         margin-top: 8px;
+         width: 100px;
+         height: 25px;
+         background: black;
+         color: white;
+         }
+.colorButtons {
+			display: block;
+			margin: 20px 0;
+		}
+
+		canvas {
+			cursor: crosshair;
+		}
+
+		div#sidebar {
+			position: absolute;
+			left: 0;
+			width: 150px;
+			padding: 20px 20px;
+			top: 0;
+		}
+
+		canvas#canvas {
+			left: 150px;
+			top: 45px;
+		}
+
+		.btn {
+			margin-bottom: 10px;
+			width: 100%;
+		}
+		input {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+
+		.input-group {
+			margin-bottom: 10px;
+		}
+
+		.toolsButtons .btn {
+			width: 48%;
+		}
+
+		.sizeButtons .btn {
+			width: 48%;
+		}
+
+		.colorpicker {
+			background: transparent;
+			height: 40px;
+		}
+      </style>
+      <!-- 
+         Hi and thanks for visiting :)
+         
+         This is my 1st canvas, so there may be some bugs... 
+         
+         Hope, you will like to draw ??
+         
+         Author: ? Don’t Know ? 
+         -->
+	   <link rel="icon" href="bg (1).png" type="image/png"></link>
+   </head>
+<div>
+   <body style='margin: 0; padding: 0;'>
+      <canvas id="canvas" width="600" height="400" style='display: block; border: 2px solid #000;'></canvas>
+      <button type="button" name="button" id='black'></button>
+      <button type="button" name="button" id='red'></button>
+      <button type="button" name="button" id='green'></button>
+      <button type="button" name="button" id='blue'></button>
+      <button type="button" name="button" id='yellow'></button>
+      <button type="button" name="button" id='purple'></button>
+      <button type="button" name="button" id='aqua'></button>
+      <button type="button" name="button" id='orange'></button>
+      <button type="button" name="button" id='pink'></button>
+      <button type="button" name="button" id='brown'></button>
+      <button type="button" name="button" id='white'></button>
+      <button type="button" name="button" id='grey'></button>
+      <button type="button" name="button" id='lime'></button>
+      <br />
+      <span>Width:</span>
+      <input type='range' id='widthChanger' value="10" min="1" max="50"/>
+      <br />
+      <input type="button" value="repeat & clear" id='repeat'/>
+      	
+			
+			<a id="saveToImage" class="btn btn-warning">Download</a>
+			<div class="canvasSize">
+			<h3>Canvas</h3>
+			<div class="input-group">
+				<span class="input-group-addon">X</span>
+				<input type="number" id="sizeX" class="form-control" placeholder="sizeX" value="800" class="size">
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon">Y</span>
+				<input type="number" id="sizeY" class="form-control" placeholder="sizeY" value="800" class="size">
+			</div>
+			<input type="button" class="updateSize btn btn-success" value="Update" id="canvasUpdate">
+		</div>
+		<input type='file' id="input" /><img id="output">
+</div>		
+      <script>
+      window.onload = () => {
+         let canvas = document.getElementById('canvas');
+         canvas.style.margin = '5px';
+         canvas.width = window.innerWidth - 15;
+         canvas.height = window.innerHeight - 120;
+         let ctx = canvas.getContext('2d');
+         
+         let coords = [];
+         let coordsTouches = [];
+         let replayColors = [];
+         let replayWidth = [];
+         
+         let colorValue = 'black';
+         let widthValue = '10';
+         
+         let colors = document.querySelectorAll('button');
+         let repeatButton = document.querySelector('#repeat');
+         let widthChangerInput = document.querySelector('#widthChanger');
+         
+         for(let color of colors) {
+         color.style.background = color.id;
+         color.onclick = () => {
+          colorValue = color.id;
+         };
+         }
+         
+         //for mobile
+         widthChangerInput.ontouchend = () => {
+         widthValue = widthChangerInput.value;
+         };
+         
+         canvas.ontouchstart = (e) => {
+         //only 1 touch...
+         if (e.touches.length > 1) {
+         canvas.ontouchmove = null;
+          	return;
+         }	else {
+         ctx.beginPath();
+         ctx.strokeStyle = colorValue;
+         ctx.lineWidth = widthValue;
+         ctx.linejoin = 'miter';
+         ctx.miterLimit = 1;
+         ctx.lineCap = 'round';
+         
+         replayColors.push(colorValue);
+         replayWidth.push(widthValue);
+         
+         coordsTouches.push('down','down');
+         
+         canvas.ontouchmove = (e) => {
+           let x = e.changedTouches['0'].clientX;
+           let y = e.changedTouches['0'].clientY;
+         
+           coordsTouches.push(x,y);
+         
+           ctx.lineTo(x,y);
+           ctx.stroke();
+         
+           canvas.ontouchend = () => {
+         	canvas.ontouchmove = null;
+         	ctx.beginPath();
+         	coordsTouches.push('up','up');
+          };
+           };
+         }
+         return false;
+         };
+         
+         //for PC
+         widthChangerInput.onmouseup = () => {
+         widthValue = widthChangerInput.value;
+         };
+         
+         canvas.onmousedown = () => {
+         ctx.beginPath();
+         ctx.strokeStyle = colorValue;
+         ctx.lineWidth = widthValue;
+         ctx.linejoin = 'miter';
+         ctx.miterLimit = 1;
+         ctx.lineCap = 'round';
+         
+         replayColors.push(colorValue);
+         replayWidth.push(widthValue);
+         
+         coords.push('down','down');
+         
+         canvas.onmousemove = (e) => {
+          let x = e.clientX;
+          let y = e.clientY;
+         
+          coords.push(x,y);
+         
+          ctx.lineTo(x,y);
+          ctx.stroke();
+         
+         canvas.onmouseup = canvas.onmouseleave = () => {
+           canvas.onmousemove = null;
+           ctx.beginPath();
+           coords.push('up','up');
+          };
+         };
+         return false;
+         };
+         
+         repeatButton.onclick = () => {
+         ctx.clearRect(0,0,canvas.width,canvas.height);
+         let timer = setInterval(() => {
+         
+          let x = coords.shift() || coordsTouches.shift();
+          let y = coords.shift() || coordsTouches.shift();
+         
+          if (x == 'down' || y == 'down') {
+          ctx.lineWidth = replayWidth.shift();
+          ctx.strokeStyle = replayColors.shift();
+          }
+         
+          if (x == 'up' || y == 'up') {
+          ctx.beginPath();
+          }
+         
+          //forbid drawing when replaying...
+          if (coords.length > 0 || coordsTouches.length > 0) {
+         canvas.onmousedown = canvas.ontouchstart = canvas.onmousemove = canvas.onmouseup = canvas.onmouseleave = canvas.ontouchend = canvas.ontouchmove = null;
+          } else {
+          //else allow drawing...
+          //for PC
+          canvas.onmousedown = () => {
+         		ctx.beginPath();
+         ctx.strokeStyle = colorValue;
+         ctx.lineWidth = widthValue;
+         		ctx.linejoin = 'miter';
+         		ctx.miterLimit = 1;
+         		ctx.lineCap = 'round';
+         
+         replayColors.push(colorValue);
+         replayWidth.push(widthValue);
+         
+         coords.push('down','down');
+         
+         		canvas.onmousemove = (e) => {
+         		  let x = e.clientX;
+         		  let y = e.clientY;
+         
+         		  coords.push(x,y);
+         
+         		  ctx.lineTo(x,y);
+         		  ctx.stroke();
+         
+         		  canvas.onmouseup = canvas.onmouseleave = () => {
+         			canvas.onmousemove = null;
+         			ctx.beginPath();
+         			coords.push('up','up');
+         		 };
+         	   };
+         	   return false;
+         };
+         
+          //for mobile
+          canvas.ontouchstart = (e) => {
+          //only 1 touch...
+          if (e.touches.length > 1) {
+         	canvas.ontouchmove = null;
+          		return;
+          }	else {
+         	ctx.beginPath();
+         	ctx.strokeStyle = colorValue;
+         	ctx.lineWidth = widthValue;
+         	ctx.linejoin = 'miter';
+         	ctx.miterLimit = 1;
+         	ctx.lineCap = 'round';
+         
+         	replayColors.push(colorValue);
+         	replayWidth.push(widthValue);
+         
+         	coordsTouches.push('down','down');
+         
+         	canvas.ontouchmove = (e) => {
+         	  let x = e.changedTouches['0'].clientX;
+         	  let y = e.changedTouches['0'].clientY;
+         
+         	  coordsTouches.push(x,y);
+         
+         	  ctx.lineTo(x,y);
+         	  ctx.stroke();
+         
+         	  canvas.ontouchend = () => {
+         		canvas.ontouchmove = null;
+         		ctx.beginPath();
+         		coordsTouches.push('up','up');
+         	 };
+            };
+          }
+          return false;
+          };	 
+          }
+         
+          if (x == undefined || y == undefined) {
+         clearInterval(timer);
+         return;
+          }
+         
+          ctx.lineTo(x,y);
+          ctx.stroke();
+         }, 10);
+         };
+         };
+	// SETTING ALL VARIABLES
+
+		var isMouseDown=false;
+		var canvas = document.createElement('canvas');
+		var body = document.getElementsByTagName("body")[0];
+		var ctx = canvas.getContext('2d');
+		var linesArray = [];
+		currentSize = 5;
+		var currentColor = "rgb(200,20,100)";
+		var currentBg = "white";
+
+
+
+
+
+		document.getElementById('saveToImage').addEventListener('click', function() {
+			downloadCanvas(this, 'canvas');
+		}, false);
+
+
+
+
+
+
+		// DOWNLOAD CANVAS
+
+		function downloadCanvas(link, canvas, filename) {
+			link.href = document.getElementById(canvas).toDataURL();
+			link.download = filename;
+		}
+
+
+
+
+
+      </script>
+<script>
+  // from http://stackoverflow.com/questions/19032406/convert-html5-canvas-into-file-to-be-uploaded
+  function uploadCanvas(dataURL) {
+    var blobBin = atob(dataURL.split(',')[1]);
+    var array = [];
+    for(var i = 0; i < blobBin.length; i++) {
+        array.push(blobBin.charCodeAt(i));
+    }
+    var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
+    var formdata = new FormData();
+    formdata.append("image", file);
+    
+    $.ajax({
+       url: "/asdfs/zlock",
+       type: "POST",
+       data: formdata,
+       processData: false, // important
+       contentType: false  // important
+    }).complete(function(response){
+      console.log(response.status);
+    });
+  }
+
+
+
+  output = document.getElementById("output");
+
+  input.addEventListener("change", function() {
+    var reader = new FileReader();
+
+    reader.addEventListener("loadend", function(arg) {
+      var src_image = new Image();
+
+      src_image.onload = function() {
+        canvas.height = src_image.height;
+        canvas.width = src_image.width;
+        ctx.drawImage(src_image, 0, 0);
+        var imageData = canvas.toDataURL("image/png"); 
+        output.src = imageData;
+        uploadCanvas(imageData);
+      }
+
+      src_image.src = this.result;
+    });
+
+    reader.readAsDataURL(this.files[0]);
+  });
+</script>
+   </body>
+</html>

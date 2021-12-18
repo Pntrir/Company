@@ -1,0 +1,170 @@
+﻿<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+      <title>fuhyjkyu | Writer</title>
+      <style>.top-nav {
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         align-items: center;
+         padding: 0 4rem;
+         background-color: #00bfff;
+         color: #fff;
+         }
+         body{
+         background: "white";
+         }
+         body{
+         background: "white";
+         }
+         .new{
+         display: block;
+         border: 1px solid #f2f2f2;
+         border-radius: 100%;
+         padding: 0 1rem 0 1rem;
+         background: #fefefe;
+         position: absolute;
+         top: 5px;
+         left: 5px;
+         font-size: 3rem;
+         line-height: 3rem;
+         text-decoration: none;
+         box-shadow: 0px 0px 4px #999;
+         }
+         /* Actions */
+         .actions{
+         display: block;
+         position: fixed;
+         width: 16%;
+         margin: 0.5rem 2% 0 82%;
+         font-size: 1rem;
+         padding: 5px;
+         border: 1px solid #f2f2f2;
+         background: #fefefe;
+         box-shadow: 0px 0px 4px #999;
+         }
+         .actions #save,
+         .actions #delete,
+         .actions #download{
+         font-size: 1.3rem;
+         padding: 0.2rem 0.4rem;
+         margin: 5px;
+         color: #fff;
+         border-radius: 2px;
+         cursor: pointer;
+         -webkit-appearance: button;
+         }
+         .actions #save{
+         float: right;
+         border: 2px solid #abf;
+         background: #68e;
+         clear: both;
+         }
+         .actions #delete{
+         float: left;
+         border: 2px solid #b42;
+         background: #b42;
+         }
+         .actions #download{
+         display: inline-block;
+         color: #000;
+         border: 2px solid #000;
+         background: #4b2;
+         margin: 1.5rem 0 0.4rem 50%;
+         transform: translateX(-50%);
+         text-decoration: none;
+         }
+         .actions input[name="name"]{
+         background: transparent;
+         border: 0;
+         text-align: left;
+         position: relative;
+         }
+         .actions .slug:before{
+         content: "#";
+         position: relative;
+         }
+         .actions .message{
+         float:right;
+         clear:both;
+         }
+         /* Editor */
+         .editor{
+         display: block;
+         position: relative;
+         width: 60%;
+         margin: 0 auto;
+         }
+         .editor input,
+         .editor textarea[id="text-val"]{
+         border: 1px solid #f2f2f2;
+         color: #000;
+         width: 100%;
+         line-height: 1.35rem;
+         font-size: 1.2rem;
+         padding: 5px;
+         box-shadow: 0px 0px 4px #999;
+         }
+         .editor input[name="title"]{
+         margin: 0.5rem 0 0 0;
+         background: "white";
+         height: 4rem;
+         line-height: 3rem;
+         font-size: 3rem;
+         }
+         .editor textarea[id="text-val"]{
+         margin: 2em 0 2rem 0;
+         background: "white";
+         height: 25rem;
+         }
+         .editor textarea[id="text-val"]:focus{
+         outline: none;
+         -webkit-box-shadow: none;
+         -moz-box-shadow: none;
+         box-shadow: none;
+         }
+
+dwn-btn{color: "white";}
+      </style>
+      
+	   <link rel="icon" href="image3.png" type="image/png"></link>
+   </head>
+   <body>
+      <nav class="top-nav">
+         <div>
+            <h2>  Text Editor</h2>
+         </div>
+         <div class="user"></div>
+      </nav>
+
+      
+      </div>
+      <div class="editor">
+         <input type="text" name="title" id="title" value="" placeholder="Title...">
+         <textarea id="text-val" placeholder="Text"></textarea><br/>
+   <input type="button" id="dwn-btn"  value="Download"/>
+      </div>
+<script>function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+// Start file download.
+document.getElementById("dwn-btn").addEventListener("click", function(){
+    // Generate download of hello.txt file with some content
+    var text = document.getElementById("text-val").value;
+   var text1 = document.getElementById("title").value;
+    var filename = text1 ;
+    
+    download(filename, text);
+}, false);</script>
+   </body>
+   </html
