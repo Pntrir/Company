@@ -88,24 +88,7 @@ button:hover {
 
 
 
-#turn {
-    display: none;
-    z-index: 100;
-    position: fixed;
-}
 
-@media (orientation: landscape) and (max-height: 500px) {
-    #turn {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2rem;
-        color: rgba(52, 73, 94, 1.0);
-        background-color: rgba(236, 240, 241, 1.0);
-    }
-}
 </style>
 
 
@@ -171,9 +154,7 @@ button:hover {
 			</table>
 					</div>
 	</div>
-    <div id="turn">
-    PLEASE TURN YOUR DEVICE
-	</div>
+
 
 <script>
 var display = document.getElementById("screen");
@@ -196,7 +177,7 @@ var buttons = document.getElementsByClassName("button");
     button.textContent != "log" && 
     button.textContent != "ln" && 
     button.textContent != "x^" && 
-    button.textContent != "x !" && 
+    button.textContent != "x!" && 
     button.textContent != "π" && 
     button.textContent != "e" && 
     button.textContent != "rad" 
@@ -234,7 +215,7 @@ var buttons = document.getElementsByClassName("button");
       ln();
     } else if (button.textContent === "x^") {
       exponent();
-    } else if (button.textContent === "x !") {
+    } else if (button.textContent === "x!") {
       factorial();
     } else if (button.textContent === "e") {
       exp();
