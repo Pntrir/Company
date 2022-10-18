@@ -1,240 +1,196 @@
-<!-- Created by CalebHM -->
-
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Timer</title>
-        <link href="https://fonts.googleapis.com/css?family=Orbitron|Roboto" rel="stylesheet">
-        <style>*::selection {
-    background: none;
-}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
 
-html {
-    margin: 0;
-    border: 0;
-    padding: 0;
-    font-size: 16px;
-    cursor: default;
-}
 
+<style>
 body {
-    margin: 0;
-    border: 0;
-    padding: 0;
-    background-color: #222;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-#timer {
-    margin: 1.5em auto;
-    border: 0;
-    padding: 0;
-    width: 100%;
-    font-family: "Orbitron", sans-serif;
-    font-size: 4.5em;
-    color: #fff;
-    text-align: center;
-    letter-spacing: 2px;
+.topnav {
+  overflow: hidden;
+  background-color: #333;
 }
 
-span {
-    display: inline-block;
-    margin: 0;
-    border: 0;
-    padding: 0;
-    text-shadow: 0 0 5px #fff;
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
 }
 
-#mn {
-    width: 35%;
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
 }
 
-#sc {
-    width: 35%;
+.topnav a.active {
+  background-color: #0033ff;
+  color: white;
 }
 
-#buttons {
-    margin: 0 auto;
-    border: 0;
-    padding: 0.2em;
-    max-width: 4em;
+.topnav .icon {
+  display: none;
 }
 
-#reset, #start {
-    display: inline-block;
-    margin: 0 auto;
-    border: 1px solid #fff;
-    border-radius: 6px;
-    padding: 0.2em 0.5em;
-    min-width: 2.5em;
-    max-width: 3.5em;
-    font-family: "Roboto", sans-serif;
-    font-size: 0.5em;
-    transition: all 0.5s ease;
-}
-
-#reset {
-    float: left;
-    border-color: #ff0;
-    box-shadow: 0 0 5px #ff0;
-    color: #ff0;
-    text-shadow: 0 0 2px #ff0;
-}
-
-#start {
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
     float: right;
-    border-color: #0ff;
-    box-shadow: 0 0 5px #0ff;
-    color: #0ff;
-    text-shadow: 0 0 2px #0ff;
+    display: block;
+  }
 }
 
-input[type=number] {
-    display: inline-block;
-    margin: 0.8em auto;
-    border: 0;
-    padding: 0.2em 0.3em;
-    min-width: 3em;
-    max-width: 3em;
-    font-size: 0.5em;
-    text-align: center;
-    box-shadow: 0 0 5px #fff;
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+</style>
+      <style>body{
+  font-family: Arial, Helvetica, sans-serif;
+  background: white;
 }
 
-input[type=number]:focus {
-    outline: 0;
+#mainstopwatch{
+  width: 400px;
+  height: 25vh;
+  margin: auto;
+  background: white;
+  text-align:center;
+  font-size: 40px;
+  border:5px solid #0033ff;
+  border-radius:30px;
+
 }
 
-::-webkit-input-placeholder {
-  color: #bbb;
-}
-::-moz-placeholder {
-  color: #bbb;
-}
-:-ms-input-placeholder {
-  color: #bbb;
-}
-:-moz-placeholder {
-  color: #bbb;
+
+#mainstopwatch button{
+  font-size: 22px;
+  -webkit-appearance: none;
+  border:none;
+  background-color: #2e80b3;
+  color:white;
+  width:110px;
+  height:55px;
+  justify-content: space-between;
+  transition:0.2s;
+  border-radius:40px;
+
 }
 
-#m, #s {
-    border-radius: 6px;
+#mainstopwatch button:nth-child(even){
+  background-color: #2e80b3;
+}
+
+#mainstopwatch button:last-child{
+  background-color: #2e80b3;
+
+}
+#mainstopwatch button:hover{
+  background:#333;
+  color:#e0e0e0;
+  border-radius:35px;
+  transition: 0.2s;
 }</style>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     </head>
     <body>
-        <div id="timer">
-            <span id="mn">00</span>
-            <span>:</span>
-            <span id="sc">00</span>
-            <div id="buttons">
-                <div id="reset">set</div>
-                <div id="start">start</div>
-            </div>
-        </div>
-        <script>// Created by CalebHM
+<div class="topnav" id="myTopnav">
+  <a href="Clock.html">Clock</a>
+  <a href="Alarm.html">Alarm</a>
+  <a href="Stopwatch.html">Stopwatch</a>
+  <a href="Timer.html" class="active">Timer</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<br>
+       <center>
 
-$(function() {
-    var started = false;
-    var time = 3;
-    
-    $("#reset").on("click", function() {
-        stop();
-        $("#start").css({
-            borderColor: "#0ff",
-            boxShadow: "0 0 5px #0ff",
-            color: "#0ff",
-            textShadow: "0 0 2px #0ff"
-        });
-        calcTime();
-        if ($("input").length < 2) {
-            $("#buttons").append("<input type='number' id='m' placeholder='min' min='0' />");
-            $("#buttons").append("<input type='number' id='s' placeholder='sec' min='0' />");
-        }
-    });
-    
-    $("#start").on("click", function() {
-        if (started === false) {
-            start();
-            started = true;
-        }
-    });
-    
-    vib = function() {
-        if(navigator) {
-            navigator.vibrate(1000);
-        }
-    };
-    
-    calcTime = function() {
-        var minutes = Math.floor(time / 60);
-        var seconds = Math.floor(time % 60);
-        
-        if (String(minutes).length < 2) {
-            minutes = "0" + minutes;
-        }
-        if (String(seconds).length < 2) {
-            seconds = "0" + seconds;
-        }
-        
-        $("#mn").html(minutes);
-        $("#sc").html(seconds);
-    };
-    
-    calcTime();
-    
-    start = function() {
-        var m = Math.abs(parseInt($("#m").val()));
-        var s = Math.abs(parseInt($("#s").val()));
-        if ($("input").length > 0 && (typeof(m) === 'number' || typeof(s) === 'number')) {
-            if (!isNaN(m) && !isNaN(s)) {
-                time = m*60 + s;
-            } else if (!isNaN(m) && isNaN(s)) {
-                time = m*60;
-            } else if (isNaN(m) && !isNaN(s)) {
-                time = s;
-            } else {
-                time = 0;
-            }
-            $("#m").remove();
-            $("#s").remove();
-            if (time > 0) {
-                if (time > 5999) {
-                    time = 5999;
-                }
-                calcTime();
+           <div id="mainstopwatch">
+               <div class="mainTime">
+                   <span id="mainminute">00</span>
+                   <span id="mainsecond">00</span>
+                   <span id="milliseconds">00</span>
+
+           </div>
+           <br>
+           <button id="start" onclick="start();">Start</button>
+           <button id="stop" onclick="stop();">Stop</button>
+           <button id="reset" onclick="reset();">Reset</button>
+       </center>
+
+
+
+        <script  async defer>let [milliseconds,second,minute,] = [0,0,0];
+let timerRef = document.querySelector('.mainTime');
+let int = null;
+
+document.getElementById('start').addEventListener('click', ()=>{
+    if(int!==null){
+        clearInterval(int);
+    }
+    int = setInterval(mainTime,10);
+});
+
+document.getElementById('stop').addEventListener('click', ()=>{
+    clearInterval(int);
+});
+
+document.getElementById('reset').addEventListener('click', ()=>{
+    clearInterval(int);
+    [milliseconds,seconds,minutes,hours] = [0,0,0];
+    timerRef.innerHTML = '00 : 00 : 00';
+});
+
+function mainTime(){
+    milliseconds+=10;
+    if(milliseconds == 1000){
+        milliseconds = 0;
+        second++;
+        if(second == 60){
+            second = 0;
+            minute++;
+            if(minute == 60){
+                minute = 0;
             }
         }
-        if (time > 0) {
-            $("#start").css({
-                    borderColor: "#999",
-                    boxShadow: "0 0 3px #999",
-                    color: "#999",
-                    textShadow: "0 0 2px #999"
-                });
-                --time;
-            var x = setInterval(function() {
-                if (started) {
-                    calcTime();
-                    --time;
-        
-                    if (time < 0) {
-                        vib();
-                        time = 0;
-                        started = false;
-                        clearInterval(x);
-                    }
-                } else {
-                    clearInterval(x);
-                }
-            }, 1000);
-        }
-    };
-    
-    stop = function() {
-        time = 0;
-        started = false;
-    };
-});</script>
+    }
+
+ let m = minute < 10 ? "0" + minute : minute;
+ let s = second < 10 ? "0" + second : second;
+ let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+ timerRef.innerHTML = ` ${m} : ${s} : ${ms}`;
+}</script>
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
     </body>
 </html>
